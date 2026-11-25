@@ -530,7 +530,8 @@ function vMap() {
 }
 function baseMap(center) {
   map = L.map('map', { zoomControl: true, attributionControl: true }).setView(center || [35.6553, 139.7369], 14);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', crossOrigin: true, attribution: '&copy; OpenStreetMap &copy; CARTO' }).addTo(map);
+  // OpenStreetMap（登録不要）を黒く反転して表示
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, crossOrigin: true, className: 'dark-tiles', attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
   return map;
 }
 async function drawMap() {
@@ -690,7 +691,7 @@ function vSet() {
     <p class="sub" style="margin:10px 0 0">設定するとスマホとPCで同じデータが見られ、機種変更しても消えません。</p>
   </div>
   <div class="card"><h3>データ</h3><div class="btns"><button class="btn g sm" data-act="csvOut">CSV書き出し</button><button class="btn g sm" data-act="csvIn">CSV読み込み</button></div>
-    <p class="sub" style="margin:10px 0 0">バージョン 1.1.0</p></div>`;
+    <p class="sub" style="margin:10px 0 0">バージョン 1.1.2</p></div>`;
 }
 function setPath(path, v) { // dev.〜 は端末だけの設定
   const dev = path.startsWith('dev.'); const ks = (dev ? path.slice(4) : path).split('.'); let o = dev ? D : S.settings; while (ks.length > 1) o = o[ks.shift()]; o[ks[0]] = v;
