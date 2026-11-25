@@ -1,5 +1,5 @@
 // 配達トラッカー Service Worker（オフライン起動・更新・通知タップ）
-const VERSION = 'dt-v1.1.0';
+const VERSION = 'dt-v1.1.2';
 const EXT = 'dt-tiles';          // 地図タイル（更新しても消さない）
 const TILE_MAX = 400;            // タイル保存の上限枚数
 const CORE = [
@@ -29,7 +29,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== location.origin) {
     // 地図タイル：保存済みを優先、裏で更新（正常な応答だけ・上限あり）
-    if (/basemaps\.cartocdn\.com/.test(url.host)) {
+    if (/tile\.openstreetmap\.org|basemaps\.cartocdn\.com/.test(url.host)) {
       e.respondWith(caches.open(EXT).then(async c => {
         const hit = await c.match(req);
         const net = fetch(req).then(r => { if (r.ok) { c.put(req, r.clone()).then(trimTiles); } return r; }).catch(() => hit);
