@@ -1,5 +1,5 @@
 // 配達トラッカー Service Worker（オフライン起動・更新・通知タップ）
-const VERSION = 'dt-v1.1.2';
+const VERSION = 'dt-v1.1.3';
 const EXT = 'dt-tiles';          // 地図タイル（更新しても消さない）
 const TILE_MAX = 400;            // タイル保存の上限枚数
 const CORE = [
@@ -13,8 +13,9 @@ self.addEventListener('install', e => {
 });
 
 self.addEventListener('activate', e => {
+  // 消すのは配達トラッカーの古いキャッシュ（dt- で始まるもの）だけ。せどりアプリ（sd-）のキャッシュは残す
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== EXT).map(k => caches.delete(k))))
+    caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('dt-') && k !== VERSION && k !== EXT).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
